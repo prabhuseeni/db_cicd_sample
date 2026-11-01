@@ -1,0 +1,20 @@
+# The main pipeline for simple_test_db
+
+resources:
+  pipelines:
+    simple_test_db_etl:
+      name: simple_test_db_etl
+      catalog: ${var.catalog}
+      schema: ${var.schema}
+      serverless: true
+      root_path: "../src/simple_test_db_etl"
+
+      libraries:
+        - glob:
+            include: ../src/simple_test_db_etl/transformations/**
+
+      environment:
+        dependencies:
+          # We include every dependency defined by pyproject.toml by defining an editable environment
+          # that points to the folder where pyproject.toml is deployed.
+          - --editable ${workspace.file_path}
